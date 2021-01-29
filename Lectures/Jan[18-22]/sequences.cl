@@ -15,17 +15,17 @@
   (quote (1 2 3 4 5 6)))
 
 
-(print (type-of my-set)) ; this will be a cons
+(format t "~A~%" (type-of my-set)) ; this will be a cons
 
 ; (sqrt 35) ; this will be a function call in lisp
 
 ; '(sqrt 35) ; this will tell lisp that this is a list of values
 
 (defvar x '(1 2 3))
-(print (type-of x)) ; this will be a cons
+(format t "~A~%" (type-of x)) ; this will be a cons
 
 (defvar y (quote (1 2 3)))
-(print (type-of y)) ; this will be a cons
+(format t "~A~%" (type-of y)) ; this will be a cons
 
 ; x and y use ' and quote, they mean the same thing
 
@@ -35,6 +35,7 @@
 ; Built in functions that work on sequences
 
 (defvar s1 '(0 2 3 10 5 6))
+
 (format t "Length of s1: ~A ~%" (length s1)) ; returns the length
 (elt s1 2) ; return the ith element of s. here it will return the 2nd element
 
@@ -112,7 +113,7 @@ cdr = content-decrement-regist
   (cond
     ( (or (not (listp L1)) (not (listp L2)) ) nil)
     ( (null L1) L2)
-    ( (null L1) L2)
+    ( (null L2) L1)
     (t (cons (car L1) (appender (cdr L1) L2)))))
 
 (format t "~%Appending two lists: ~A ~%" (appender '(1 2 3 4) '(2 3 4 5)))
@@ -147,5 +148,9 @@ cdr = content-decrement-regist
 ; can loop up dimension list using array-dimensions
 (format t "Dimensions of array: ~A ~%" (array-dimensions my-array))
 
-(loop for iter in my-array do
-     (format t "~A ~%" (array-dimension my-array iter)))
+(format t "~A ~%" (array-dimension my-array 0))
+
+(format t "~%Looking up indices using aref~%")
+
+(format t "~A ~%" (aref my-array 1 2))  ; returns myArray[i][j]
+(setf (aref myArray 1 2) 3)             ; like myArray[i][j] = 3
