@@ -22,8 +22,8 @@
   (let 
     ( (retval (checker 3 2) ))
     (if (eq retval 'Error)
-      (format t "test-checker-first-param-wrong: Pass~%")
-      (format t "test-checker-first-param-wrong: Fail~%")))) 
+      (format t "test-checker-second-param-wrong: Pass~%")
+      (format t "test-checker-second-param-wrong: Fail~%")))) 
 
 (defun test-checker-list-length-greater ()
   "list length is greater than N"
@@ -38,8 +38,8 @@
   (let 
     ( (retval (checker 5 '(1 2 3) )))
     (if (not retval)
-      (format t "test-checker-list-length-greater: Pass~%")
-      (format t "test-checker-list-length-greater: Fail~%")))) 
+      (format t "test-checker-list-length-lesser: Pass~%")
+      (format t "test-checker-list-length-lesser: Fail~%")))) 
 
 (test-checker-first-param-wrong)
 (test-checker-second-param-wrong)
