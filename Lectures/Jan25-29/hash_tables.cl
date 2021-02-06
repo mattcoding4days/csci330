@@ -50,4 +50,18 @@
 ;(format t "~A ~%" key)
 
 
-()
+
+(setf myTable (make-hash-table))
+
+(setf (gethash 1 myTable) "entry1")
+
+(setf (gethash 2 myTable) "#\2")
+
+(setf (gethash 3 myTable) '(42))
+
+(remhash -1 myTable)
+
+; from the Common Lisp cookbook
+(loop for key being the hash-keys of myTable
+        using (hash-value value)
+        do (format t "~A:~A ~%" key value))
