@@ -1,6 +1,4 @@
 
-; next = 3 older 1 recent 1
-
 (defun f (N &optional (next 3) (older 1) (recent 1))
   (cond
     ( (not (integerp N)) nil)
