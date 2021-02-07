@@ -7,10 +7,9 @@
 ;(format t "Result: ~A ~%" (f V))
 
 
-;(setf V '(4 5 6 7 8 9 10))
-;(setf V '(1.5 0 2.1 3 "foo" 4))
+;(setf V '(1.5 0 2.1 "foo" 3 4))
 ;(format t "~%Try (gt '(~A)) ~%" V)
-(format t "Result: ~A ~%" (gt 2 V))
+;(format t "Result: ~A ~%" (gt 2 V))
 
 
 ;(setf V '(1.5 0 2.1 3 "foo" 4))
@@ -19,9 +18,16 @@
 
 ;(format t "~A ~%" (gt 2 V))
 
-;(setf V '(nil 3 (nil 5 nil)))
-;(format t "~%Try (isTree ~A) ~%" V)
-;(format t "Result: ~A ~%" (isTree V))
 
+;(setf V '(17 10 93))
+;(setf V '(nil 3 (nil 5 nil)))
+;(setf V '((nil -14 nil) 97 nil))
+;(setf V '(nil 3 (nil 5 nil)))
+
+(setf V '(nil 7 (nil 8 nil)))
+(format t "~%Try (isTree ~A) ~%" V)
+(format t "Result: ~A ~%" (isTree V))
+
+;(setf V '((nil 10 nil) 240 (nil -8 nil)))
 ;(format t "~%Try (sumTree ~A) ~%" V)
 ;(format t "Result: ~A ~%~%" (sumTree V))
