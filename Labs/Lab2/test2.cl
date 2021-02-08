@@ -21,10 +21,12 @@
 ;(setf V '((nil -14 nil) 97 nil))
 ;(setf V '(nil 3 (nil 5 nil)))
 
-(setf V '(nil 7 (nil 8 nil)))
-(format t "~%Try (isTree ~A) ~%" V)
-(format t "Result: ~A ~%" (isTree V))
+;(setf V '(nil 7 (nil 8 nil)))
+;(format t "~%Try (isTree ~A) ~%" V)
+;(format t "Result: ~A ~%" (isTree V))
 
-;(setf V '((nil 10 nil) 240 (nil -8 nil)))
-;(format t "~%Try (sumTree ~A) ~%" V)
-;(format t "Result: ~A ~%~%" (sumTree V))
+(setf V '((nil 10 nil) 240 (nil -8 nil)))
+(setf L '())
+(setf K '((10 10 nil) 240 (nil -8 nil)))
+;(format t "~%Try (sumTree ~A) ~%" L)
+(format t "Result: ~A ~%~%" (sumTree K))
