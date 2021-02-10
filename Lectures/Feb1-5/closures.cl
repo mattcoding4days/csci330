@@ -64,6 +64,5 @@
 ; 11 km per second
 (defvar bobtime (timeBuilder 60000))
 
-
 ;; 1000 days has passed for us
 (format t "Bob has has been travelling for ~A days~%" (funcall bobtime 1825))
