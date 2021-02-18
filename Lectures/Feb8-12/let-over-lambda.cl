@@ -38,6 +38,7 @@
     (if (realp xInit) (setf x xInit))
     (if (realp yInit) (setf y yInit))
     (if (and (realp rInit) (> rInit 0)) (setf r rInit))
+
     ; lambda function expects a command and possibly an arg
     (lambda (cmd &optional (arg nil))
       (cond
