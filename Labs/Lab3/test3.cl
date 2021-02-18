@@ -7,35 +7,51 @@
 ; sample test calls: basic use of dispatcher
 ; ------------------------------------------
 
+
+
 (format t "~%Creating dispatcher~%")
 (defvar TT (buildTimeTracker '("Max" ("Ivan" 12300) ("Zalika" 61000) ("Emma" 37200))))
+(format t "~A ~%" (funcall TT 'Speed "Zalika" 12678))
 
-(format t "~%Setting time passed to 1000~%")
-(defvar r (funcall TT 'TimePassed 1000))
-(format t "    result is ~A~%" r)
-
-(format t "~%Looking up time for Ivan~%")
-(setf   r (funcall TT 'CurrentTime "Ivan"))
-(format t "    result is ~A~%" r)
-
-(format t "~%Changing Zalika speed to 12345~%")
-(setf   r (funcall TT 'Speed "Zalika" 12345))
-(format t "    result is ~A~%" r)
+; verify update
+(format t "~A ~%" (funcall TT 'Speed "Enterprise" 98))
 
 
-; sample test calls: use of macros
-; --------------------------------
 
-(format t "~%Using macro to set time passed to 22222~%")
-(setf r (setTime TT 22222))
-(format t "    result is ~A~%" r)
+;(defvar TE (buildTimeTracker '()))
 
-(format t "~%Using macro to look up current time for Emma~%")
-(setf r (getTime TT "Emma"))
-(format t "    result is ~A~%" r)
 
-(format t "~%Using macro to change Zalika speed to 500~%")
-(setf r (setSpeed TT "Zalika" 500))
-(format t "    result is ~A~%" r)
+;(if (not (null TE))
+  ;(funcall TE 'Speed "Matt")
+  ;(format t "TT is nil ~%"))
 
-(format t "~%...end of testing~%~%")
+
+;(format t "~%Setting time passed to 1000~%")
+;(defvar r (funcall TT 'TimePassed 1000))
+;(format t "    result is ~A~%" r)
+
+;(format t "~%Looking up time for Ivan~%")
+;(setf   r (funcall TT 'CurrentTime "Ivan"))
+;(format t "    result is ~A~%" r)
+
+;(format t "~%Changing Zalika speed to 12345~%")
+;(setf   r (funcall TT 'Speed "Zalika" 12345))
+;(format t "    result is ~A~%" r)
+
+
+;; sample test calls: use of macros
+;; --------------------------------
+
+;(format t "~%Using macro to set time passed to 22222~%")
+;(setf r (setTime TT 22222))
+;(format t "    result is ~A~%" r)
+
+;(format t "~%Using macro to look up current time for Emma~%")
+;(setf r (getTime TT "Emma"))
+;(format t "    result is ~A~%" r)
+
+;(format t "~%Using macro to change Zalika speed to 500~%")
+;(setf r (setSpeed TT "Zalika" 500))
+;(format t "    result is ~A~%" r)
+
+;(format t "~%...end of testing~%~%")

@@ -48,18 +48,93 @@
 ;
 ; example:
 ;  setting up a dispatcher for a home planet named Max and three spacecraft
-;     (defvar TT (buildTimeTracker ("Max" ("Ivan" 12300) ("Zalika" 61000) ("Emma" 37200))))
+;     (defvar TT '(buildTimeTracker ("Max" ("Ivan" 12300) ("Zalika" 61000) ("Emma" 37200))))
 ;  calls utilizing the dispatcher
 ;     (defvar r (funcall TT 'TimePassed 1000)            ; 1000 seconds have passed on earth
 ;     (setf   r (funcall TT 'CurrentTime "Emma"))        ; lookup Emma's current time
 ;     (setf   r (funcall TT 'Speed "Zalika" 12345))      ; set Zalika's new speed to 12345 km/s
 
+
+
 (defun buildTimeTracker (L)
-  (let ( )         ; local vars
-    (labels ( ) ; local methods
+  (let
+    ; local vars
+    ( 
+      (fleet '())
+      (planet_name "") 
+      (time_since_launch 157680000) ; 5 years in seconds
+      )
+
+    ;; Error check for local var assigment
+    (if (or (null L) (not (listp L)))
+      (return-from buildTimeTracker nil))
+
+    (if (and (listp (cdr L)) (not (null (cdr L))))
+      (setf fleet (cdr L)))
+
+    (if (stringp (car L))
+      (setf planet_name (car L)))
+
+    ; local methods
+    (labels
+      (
+       ; set a new speed for a spacecraft,
+       ; dispatch command is 'Speed, arguments are
+       ; the name of the spacecraft and new speed
+       ; e.g. (funcall Dispatcher 'Speed "Bob" 2500)
+       ; returns their updated speed
+       ; (if spacecraft or new speed is invalid it doesn't change anything, returns nil)
+       (updateSpeed
+         (spacecraftName newSpeed)
+      
+         (if (not (or (stringp spacecraftName) (realp newSpeed))) nil)
+
+         (dolist (collection fleet)
+           (if (equal (car collection) spacecraftName)
+             ; here (cdr collection) leaves a trailing '.' behind.
+             ; oddly enough cadr works perfect even though there is
+             ; no third element. So went with second instead
+             (block
+               Assign
+               (setf (second collection) newSpeed)
+               (return-from updateSpeed (second collection))))))
+
+       ; query what the current time is (seconds since launch) for a spacecraft or home planet
+       ; dispatch command is 'CurrentTime, argument is the spacecraft/planet name
+       ; e.g. (funcall Dispatcher 'CurrentTime "Bob")
+       ; returns current time for that user (seconds since launches)
+       ; (if the user isn't in the list then it returns nil)
+       (getCurrentTime
+         ( )
+         (format t "In Get current time ~%"))
+
+       (getTimePassed
+         ( )
+         (format t "In getTimePassed() ~%"))
+
+
+
+       ) ; end of labels list
+
       ; building and returning dispatcher
       (lambda (cmd arg1 &optional (arg2 nil))
-        (format t "I am a dispatcher~%")))))
+        (cond
+          ; 'Speed
+          ((equalp cmd 'Speed) (updateSpeed arg1 arg2))
+
+          ; 'CurrentTime
+          ((equalp cmd 'CurrentTime) (getCurrentTime))
+
+          ; 'TimePassed
+          ((equalp cmd 'TimePassed) (getTimePassed))
+
+          ) ; end of cond
+        ) ; end of lambda
+      ) ; end of labels
+    ) ; end of let
+  ) ; end of defun
+
+
 
 ; macro exercise
 ; --------------
@@ -76,11 +151,13 @@
 ;   (setSpeed TT s) to set a new speed for the specified spacecraft,
 ;        e.g. (setSpeed X "Max" 500) ; becomes (funcall X 'Speed "Max" 500)
 
-(defmacro setTime (Dispatcher NewTime)
-  `(format t "I am the result of a setTime macro~%"))
 
-(defmacro getTime (Dispatcher Spacecraft)
-  `(format t "I am the result of a getTime macro~%"))
 
-(defmacro setSpeed (Dispatcher Spacecraft NewSpeed)
-  `(format t "I am the result of a setSpeed macro~%")
+;(defmacro setTime (Dispatcher NewTime)
+;`(format t "I am the result of a setTime macro~%"))
+
+;(defmacro getTime (Dispatcher Spacecraft)
+;`(format t "I am the result of a getTime macro~%"))
+
+;(defmacro setSpeed (Dispatcher Spacecraft NewSpeed)
+;`(format t "I am the result of a setSpeed macro~%")
