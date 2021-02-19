@@ -63,17 +63,23 @@
       (fleet_map (make-hash-table :test 'equal))
       (homePlanetName "") 
       (timeSinceLaunch 0)
-      (lightspeed_kms 299792))
-
-    ;; Error check for local var assigment
+      (*lightspeed_kms* 299792))
+    
+    ;; Check if the main argument L is a valid list
     (if (or (null L) (not (listp L)))
       (block
         MainArgNotList
-        (format t "Main argument is not a list: ~A~%" L)
+        (format t "Invalid argument list: ~A~%" L)
+        (return-from buildTimeTracker 'Error)))
+    
+    ;; Check if home planet name is valid
+    (if (stringp (car L))
+      (setf homePlanetName (car L))
+      (block
+        InvalidHPName
+        (format t "Invalid Home Planet Name: ~A~%" (car L))
         (return-from buildTimeTracker 'Error)))
 
-    (if (stringp (car L))
-      (setf homePlanetName (car L)))
 
     ; local methods
     (labels
@@ -106,15 +112,15 @@
            ; all fields are valid, build a hash map with fields
            (setf (gethash (car ship) fleet_map) (list (cadr ship) 0))))
 
+
        ; debug printer method
        (printAll
          ( )
-           (format t "~%Debug Mode~%==========~%~%Printing Hash Table~%~%")
-
+           (format t "~%*** Debug Mode ***~%==================~%~%Printing Hash Table~%~%")
 
            (loop for key being the hash-keys of fleet_map
                  using (hash-value value)
-                 do (format t "Name: ~A ~%Speed: ~A~%Time: ~A~%~%" key (first value) (second value))))
+                 do (format t "Name: ~A ~%Speed: ~A~%Time: ~A~%~%" key (car value) (cadr value))))
 
 
        ; set a new speed for a spacecraft,
@@ -126,39 +132,41 @@
        (updateSpeed
          (spacecraftName newSpeed)
 
+         (format t "~%*** Setting new speed of '~A' for space ship '~A' ***~%" newSpeed spacecraftName)
+
          (if (not (stringp spacecraftName) )
            (block
              HandleError
                (format t "updateSpeed: space Ship name needs to be a string -> ~A~%" spacecraftName )
-               (return-from updateSpeed 'Error)))
+               (return-from updateSpeed nil)))
          
          (if (not (> (length spacecraftName) 0))
              (block
                HandleError
              (format t "updateSpeed: space Ship name cannot be empty -> ~A~%" spacecraftName )
-             (return-from updateSpeed 'Error)))
+             (return-from updateSpeed nil)))
 
          (if (not (integerp newSpeed))
-             (block
+             (lambda
                HandleError
              (format t "updateSpeed: new speed must an integer -> ~A~%" newSpeed )
-             (return-from updateSpeed 'Error)))
+             (return-from updateSpeed nil)))
 
          (if (not (> newSpeed 0) )
              (block
                HandleError
              (format t "updateSpeed: new speed must be greater than 0 -> ~A~%" newSpeed )
-             (return-from updateSpeed 'Error)))
+             (return-from updateSpeed nil)))
 
          (loop for key being the hash-keys of fleet_map
                using (hash-value value)
                do (if (equal key spacecraftName)
-                      (block
-                        Update
-                        (setf (car value) newSpeed)
-                        (return-from updateSpeed (car value)))))
+                    (block
+                      Update
+                      (setf (car value) newSpeed)
+                      (return-from updateSpeed (car value))
+                      (return-from updateSpeed nil)))))
 
-         ) ; end of update speed
 
        ; query what the current time is (seconds since launch) for a spacecraft or home planet
        ; dispatch command is 'CurrentTime, argument is the spacecraft/planet name
@@ -167,21 +175,36 @@
        ; (if the user isn't in the list then it returns nil)
        (lookUpTime
          (name)
-         (format t "~%***Looking up current time for: '~A' ***~%" name)
-         (if (equal name homePlanetName)
-           (return-from lookUpTime timeSinceLaunch)
-           (loop for key being the hash-keys of fleet_map
-                 using (hash-value value)
-                 do (if (equal key name)
-                          (return-from lookUpTime (cadr value))
-                          (return-from lookUpTime nil))))
-        )
+         (format t "~%*** Looking up current time for: '~A' ***~%" name)
 
-        ; private
+         (if (not (stringp name))
+           (block
+           InvalidName
+           (format t "lookUpTime: Invalid name passed ~A~%" name)
+           (return-from lookUpTime 'Error)))
+
+         (if (equal name homePlanetName)
+           (return-from lookUpTime timeSinceLaunch))
+
+         (loop for key being the hash-keys of fleet_map
+               using (hash-value value)
+               do (if (equal key name)
+                    (block
+                      Update
+                      (return-from lookUpTime (cadr value))
+                      (return-from lookUpTime nil)))))
+
+       ; private helper method for updateTime
+       ; the time computation for spacecraft is as follows:
+       ; if N seconds pass on the home planet while the craft is travelling at speed S
+       ; then the time that passes for them is N * sqrt(1 - (S*S/C*C))
+       ; where C = 299792 (approximate speed of light in km/s)
        (calcTime
          (newTime relspeed)
-         (format t "~%***Calculating time***~%~%")
-         (format t "newTime: ~A~%relspeed: ~A~%" newTime relspeed))
+         (format t "~%*** Calculating new time for time '~A' and speed '~A' ***~%~%" newTime relspeed)
+
+         (setf final (* newTime (sqrt (- 1 (/ (* relspeed relspeed) (* *lightspeed_kms* *lightspeed_kms*))))))
+         (return-from calcTime final))
 
 
         ; specify a new (additional) amount of time that has passed on earth
@@ -193,20 +216,25 @@
         ; (if the new time is invalid then it doesn't change the times, returns nil)
        (updateTime
          (addedTime)
-         (format t "~%In updateTime ~%")
+
+         (if (not (integerp addedTime))
+           (return-from updateTime nil))
+
+         (if (not (> addedTime 0))
+           (return-from updateTime nil))
+
+         (format t "~%*** Updating time for home planet ***~%")
+         (setf timeSinceLaunch (+ timeSinceLaunch addedTime))
 
          (loop for key being the hash-keys of fleet_map
                using (hash-value value)
-               do (format t "Passing for ~A~%" key)
-                 ; value = (12300 0)
-                  (calcTime (+ (cadr value) addedTime) (car value)))
+               do (setf (second value) (calcTime (+ (second value) addedTime) (first value))))
 
-        ) ; end of updateTime
-
+         (return-from updateTime timeSinceLaunch))
 
        ) ; end of labels list
 
-      ; call local private methods
+      ; call initialize on 'object instantiation'
       (initialize)
 
       ; building and returning dispatcher
