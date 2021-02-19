@@ -147,7 +147,7 @@
              (return-from updateSpeed nil)))
 
          (if (not (integerp newSpeed))
-             (lambda
+             (block
                HandleError
              (format t "updateSpeed: new speed must an integer -> ~A~%" newSpeed )
              (return-from updateSpeed nil)))
