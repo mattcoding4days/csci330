@@ -251,7 +251,6 @@
 
           ; 'TimePassed
           ((equalp cmd 'TimePassed) (updateTime arg1))
-
           ) ; end of cond
         ) ; end of lambda
       ) ; end of labels
