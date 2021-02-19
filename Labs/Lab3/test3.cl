@@ -10,9 +10,9 @@
 
 
 (format t "~%Creating dispatcher~%~%")
-(defvar TT (buildTimeTracker '("Max" ("Ivan" 12300) ("Zalika" 61000) ("Emma" 37200))))
-;(defvar TT (buildTimeTracker '("Max" ("Ivan" -1) ("Zalika" 61000) ("Emma" 37200))))
-;(defvar TT (buildTimeTracker '("Max" ("Ivan" 6100) )))
+(defvar TT (buildTimeTracker '("Bajor" ("The Enterprise" 12300) ("The Defiant" 61000) ("The Challenger" 37200))))
+;(defvar TT (buildTimeTracker '("Bajor" ("Ivan" -1) ("Zalika" 61000) ("Emma" 37200))))
+;(defvar TT (buildTimeTracker '("Bajor" ("Ivan" 6100) )))
 
 
 ;;;; Test debug statement
@@ -23,23 +23,27 @@
 
 ;;;; Test Speed with correct params
 ;(if (not (eq TT 'Error))
-  ;(format t "Result of 'Speed: ~A~%" (funcall TT 'Speed "Ivan" 9000))
+  ;(format t "Result of 'Speed: ~A~%" (funcall TT 'Speed "The Enterprise" 9000))
   ;(format t "~A~%" TT))
 
 
 ;;;; Test Speed with negative speed
 ;(if (not (eq TT 'Error))
-  ;(format t "Result of 'Speed: ~A~%" (funcall TT 'Speed "Ivan" -1))
+  ;(format t "Result of 'Speed: ~A~%" (funcall TT 'Speed "The Enterprise" -1))
   ;(format t "~A~%" TT))
 
 
-(format t "~%Setting time passed to 1000~%")
-(defvar r (funcall TT 'TimePassed 1000))
-(format t "    result is ~A~%" r)
+;(format t "~%Setting time passed to 1000~%")
+;(defvar r (funcall TT 'TimePassed 1000))
+;(format t "~%Result is ~A~%" r)
 
-;(format t "~%Looking up time for Ivan~%")
-;(setf   r (funcall TT 'CurrentTime "Ivan"))
-;(format t "    result is ~A~%" r)
+(format t "~%Looking up time for The Enterprise~%")
+(setf   r (funcall TT 'CurrentTime "The Enterprise"))
+(format t "~%Result is ~A~%~%" r)
+
+(format t "~%Looking up time for Home Planet~%")
+(setf   r (funcall TT 'CurrentTime "Bajor"))
+(format t "~%Result is ~A~%~%" r)
 
 ;(format t "~%Changing Zalika speed to 12345~%")
 ;(setf   r (funcall TT 'Speed "Zalika" 12345))

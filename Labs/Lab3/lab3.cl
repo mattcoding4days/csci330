@@ -61,10 +61,9 @@
     ; local vars
     ( 
       (fleet_map (make-hash-table :test 'equal))
-      (planet_name "") 
-      (time_since_launch 0)
-      (lightspeed_kms 299792)
-      )
+      (homePlanetName "") 
+      (timeSinceLaunch 0)
+      (lightspeed_kms 299792))
 
     ;; Error check for local var assigment
     (if (or (null L) (not (listp L)))
@@ -74,7 +73,7 @@
         (return-from buildTimeTracker 'Error)))
 
     (if (stringp (car L))
-      (setf planet_name (car L)))
+      (setf homePlanetName (car L)))
 
     ; local methods
     (labels
@@ -167,23 +166,22 @@
        ; returns current time for that user (seconds since launches)
        ; (if the user isn't in the list then it returns nil)
        (lookUpTime
-         (spaceCraftName)
-         (format t "~%Looking up current time for craft: ~A ~%" spaceCraftName)
-
-         (loop for key being the hash-keys of fleet_map
-               using (hash-value value)
-               do (if (equal key spaceCraftName)
-                        (return-from updateSpeed (cadr value))
-                        (return-from updateSpeed nil)))
+         (name)
+         (format t "~%***Looking up current time for: '~A' ***~%" name)
+         (if (equal name homePlanetName)
+           (return-from lookUpTime timeSinceLaunch)
+           (loop for key being the hash-keys of fleet_map
+                 using (hash-value value)
+                 do (if (equal key name)
+                          (return-from lookUpTime (cadr value))
+                          (return-from lookUpTime nil))))
         )
 
         ; private
        (calcTime
          (newTime relspeed)
-         (format t "In calcTime~%")
+         (format t "~%***Calculating time***~%~%")
          (format t "newTime: ~A~%relspeed: ~A~%" newTime relspeed))
-
-
 
 
         ; specify a new (additional) amount of time that has passed on earth
@@ -201,7 +199,8 @@
                using (hash-value value)
                do (format t "Passing for ~A~%" key)
                  ; value = (12300 0)
-                  (calcTime (+ (second value) addedTime) (first value)))
+                  (calcTime (+ (cadr value) addedTime) (car value)))
+
         ) ; end of updateTime
 
 
