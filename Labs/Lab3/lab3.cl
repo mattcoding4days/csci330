@@ -276,11 +276,11 @@
 
 
 
-;(defmacro setTime (Dispatcher NewTime)
-;`(format t "I am the result of a setTime macro~%"))
+(defmacro setTime (Dispatcher NewTime)
+  `(funcall ,Dispatcher 'TimePassed ,NewTime))
 
-;(defmacro getTime (Dispatcher Spacecraft)
-;`(format t "I am the result of a getTime macro~%"))
+(defmacro getTime (Dispatcher Spacecraft)
+  `(funcall ,Dispatcher 'CurrentTime ,Spacecraft))
 
-;(defmacro setSpeed (Dispatcher Spacecraft NewSpeed)
-;`(format t "I am the result of a setSpeed macro~%")
+(defmacro setSpeed (Dispatcher Spacecraft NewSpeed)
+  `(funcall ,Dispatcher 'Speed ,Spacecraft ,NewSpeed))
