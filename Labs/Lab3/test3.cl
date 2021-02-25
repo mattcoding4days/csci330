@@ -10,7 +10,7 @@
 
 
 (format t "~%Creating dispatcher~%~%")
-(defvar TT (buildTimeTracker '("Bajor" ("The Enterprise" 32700) ("The Defiant" 67890) ("Klingon Warbird" 45678))))
+(defvar TT (buildTimeTracker '("Bajor" ("The Enterprise" 9765) ("The Defiant" 34567) ("Klingon Warbird" 102345))))
 
 
 ;;;; Test debug statement
