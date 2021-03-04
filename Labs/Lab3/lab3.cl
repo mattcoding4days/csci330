@@ -203,7 +203,8 @@
          (newTime relspeed)
          (format t "~%*** Calculating new time for time '~A' and speed '~A' ***~%~%" newTime relspeed)
 
-         (setf final (* newTime (sqrt (- 1 (/ (* relspeed relspeed) (* *lightspeed_kms* *lightspeed_kms*))))))
+         (setf final (* newTime (sqrt (- 1 (/ (* relspeed relspeed)
+                                              (* *lightspeed_kms* *lightspeed_kms*))))))
          (return-from calcTime final))
 
 
