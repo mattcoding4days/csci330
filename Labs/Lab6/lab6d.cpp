@@ -7,7 +7,10 @@ float prod(float f, float g) { return f * g; }
 std::string conc(std::string s1, std::string s2) { return s1 + s2; }
 
 // applyBinary templated function implementation belongs here
-
+template <typename T>
+T applyBinary(T (*func)(T arg1, T arg2), T param1, T param2) {
+    return (*func)(param1, param2);
+}
 
 int main() {
     std::string s = "hello";

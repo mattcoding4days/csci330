@@ -11,7 +11,7 @@ lab6c: lab6c.cpp
 	g++ -Wall -Wextra lab6c.cpp -o lab6c
 
 lab6d: lab6d.cpp
-	g++ -Wall -Wextra lab6d.cpp -o lab6ad
+	g++ -Wall -Wextra lab6d.cpp -o lab6d
 
 clean:
 	rm -rf lab6?.o lab6?

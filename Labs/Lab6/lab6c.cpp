@@ -3,9 +3,21 @@
 #include <iostream>
 
 /*dispFractions, 1, 2, and 2+ templated function implementations belong here*/
-void dispFractions(int, ...);
+template <typename T>
+void dispFractions(T x) {
+    std::cout << "(ignored leftover value " << x << ")\n";
+}
 
+template <typename T, typename K>
+void dispFractions(T num, K denom) {
+    std::cout << num << "/" << denom << '\n';
+}
 
+template <typename T, typename K, typename... Args>
+void dispFractions(T num, K denom, Args... args) {
+    std::cout << num << "/" << denom << " ";
+    dispFractions(args...);
+}
 
 int main() {
     dispFractions(2, 17, 4);
